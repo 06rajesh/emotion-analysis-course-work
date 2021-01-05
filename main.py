@@ -92,18 +92,17 @@ def run_isear_sgd_classifier():
     print(f1)
 
 
-def run_ssec_sgd_classifier():
+def run_ssec_dict_emo():
     loader = Loader()
     loader.load()
 
-    x, y = loader.get_test_data()
-    for i in range(10):
-        print(x[i])
-        print(y[i])
+    x_test, y_test = loader.get_test_data()
+    output = dict_emo.predict(x_test)
+    compute_accuracy(output, y_test)
 
 
 if __name__ == '__main__':
-    run_ssec_sgd_classifier()
+    run_ssec_dict_emo()
 
 
 
