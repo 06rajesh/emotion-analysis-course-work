@@ -9,7 +9,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import SGDClassifier
-from sklearn.svm import SVC
 
 dict_labels = ["joy", "anger", "surprise", "sadness", "fear"]
 
@@ -101,8 +100,37 @@ def run_ssec_dict_emo():
     compute_accuracy(output, y_test)
 
 
+def run_ssec_sgd_classifier():
+    loader = Loader()
+    loader.load()
+
+    x_train, y_train = loader.get_train_data()
+    classes = loader.get_classes()
+    x_test, y_test = loader.get_test_data()
+
+    enc = OneHotEncoder(classes)
+    y_train_encoded = enc.encode(y_train)
+    y_train_encoded = np.array(y_train_encoded)
+
+    y_test_encoded = enc.encode(y_test)
+    y_test_encoded = np.array(y_test_encoded)
+
+    for i in range(len(classes)):
+        y = y_train_encoded[:, i]
+        text_clf = Pipeline([('vect', CountVectorizer()),
+                             ('tfidf', TfidfTransformer()),
+                             ('clf', SGDClassifier()),
+                             ])
+
+        fitting = text_clf.fit(x_train, y)
+        y_pred = text_clf.predict(x_test)
+        y_true = y_test_encoded[:, i]
+        f1 = f1_score(y_pred, y_true, average='macro')
+        print("%s : %2f" % (classes[i], f1))
+
+
 if __name__ == '__main__':
-    run_ssec_dict_emo()
+    run_ssec_sgd_classifier()
 
 
 
