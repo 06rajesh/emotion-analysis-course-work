@@ -20,7 +20,7 @@ class Glove:
         and store the whole embedding as a dictionary
         :return: none
         """
-        with open(path.dirname(path.abspath(__file__)) + "pretrained/glove.6B.50d.txt", 'r', encoding="utf-8") as f:
+        with open(path.dirname(path.abspath(__file__)) + "/pretrained/glove.6B.200d.txt", 'r', encoding="utf-8") as f:
             for line in f:
                 values = line.split()
                 word = values[0]

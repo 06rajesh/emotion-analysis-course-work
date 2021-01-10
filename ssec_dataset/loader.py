@@ -10,11 +10,11 @@ class Loader:
         self.testfile = path.join(self.dirname, "test-combined-0.0.csv")
         self.train_x, self.train_y  = list(), list()
         self.test_x, self.test_y = list(), list()
-        self.classes = list()
+        self.classes = ['anger', 'anticipation', 'disgust', 'fear', 'joy', 'sadness', 'surprise', 'trust']
 
     @staticmethod
     def load_csv(filename: str):
-        x, y, classes = list(), list(), list()
+        x, y = list(), list()
         line_count = 0
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter='\t')
@@ -27,17 +27,15 @@ class Loader:
                         if row[i] != "---":
                             label = row[i].lower()
                             labels.append(label)
-                            if label not in classes:
-                                classes.append(label)
                     x.append(row[n_col - 1])
                     y.append(labels)
                     line_count += 1
-        print("Total %2d Lines have been loaded, Total classes %2d" % (line_count, len(classes)))
-        return x, y, classes
+        print("Total %2d Lines have been loaded" % line_count)
+        return x, y
 
     def load(self):
-        self.train_x, self.train_y, self.classes = self.load_csv(self.trainfile)
-        self.test_x, self.test_y, _ = self.load_csv(self.testfile)
+        self.train_x, self.train_y = self.load_csv(self.trainfile)
+        self.test_x, self.test_y = self.load_csv(self.testfile)
 
     def get_classes(self):
         return self.classes
